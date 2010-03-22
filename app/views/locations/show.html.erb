@@ -1,0 +1,30 @@
+<% title "Location" %>
+
+<p>
+  <b>Name:</b>
+  <%=h @location.name %>
+</p>
+
+<p>
+  <b>Package:</b>
+  <%=h @location.package.name %>
+</p>
+
+<p>
+  <b>LBS identifier:</b>
+  <%=h @location.lbs_identifier %>
+</p>
+
+<% unless @location.coordinates.nil? or @location.coordinates.empty? %>
+<p>
+  <b>Coordinates:</b>
+  <%=h @location.coordinates %>
+</p>
+<% end %>
+
+<script type="text/javascript">
+  draw_qrcode("<%= @location.lbs_identifier %>");
+</script>
+
+<%= link_to 'Edit', edit_location_path(@location) %> |
+<%= link_to 'Back', @location.package %>

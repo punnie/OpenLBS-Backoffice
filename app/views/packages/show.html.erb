@@ -1,0 +1,23 @@
+<p>
+  <b>Name:</b>
+  <%= @package.name %>
+</p>
+
+<p>
+  <b>LBS identifier:</b>
+  <%=h @package.lbs_identifier %>
+</p>
+
+<p>
+  <b>Locations:</b>
+<ul>
+  <% @package.locations.each do |l| %>
+  <li><%= link_to l.name, l %></li>
+  <% end %>
+</ul>
+</p>
+
+
+<%= link_to 'New location', new_location_path(:package => @package.id) %> |
+<%= link_to 'Edit', edit_package_path(@package) %> |
+<%= link_to 'Back', packages_path %>

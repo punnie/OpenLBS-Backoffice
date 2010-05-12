@@ -1,0 +1,40 @@
+<h1>Editing content</h1>
+
+<% form_for(@content) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :location_id %><br />
+    <%= f.text_field :location_id %>
+  </p>
+  <p>
+    <%= f.label :tags %><br />
+    <%= f.text_field :tags %>
+  </p>
+  <p>
+    <%= f.label :item_file_name %><br />
+    <%= f.text_field :item_file_name %>
+  </p>
+  <p>
+    <%= f.label :item_content_type %><br />
+    <%= f.text_field :item_content_type %>
+  </p>
+  <p>
+    <%= f.label :item_file_size %><br />
+    <%= f.text_field :item_file_size %>
+  </p>
+  <p>
+    <%= f.label :item_updated_at %><br />
+    <%= f.datetime_select :item_updated_at %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @content %> |
+<%= link_to 'Back', contents_path %>

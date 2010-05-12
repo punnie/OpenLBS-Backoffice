@@ -14,6 +14,7 @@ class LocationsController < ApplicationController
   # GET /locations/1.xml
   def show
     @location = Location.find(params[:id])
+    @size = @location.contents.sum('item_file_size').bytes
 
     respond_to do |format|
       format.html # show.html.erb

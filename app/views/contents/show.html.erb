@@ -1,0 +1,22 @@
+<p>
+  <b>Name:</b>
+  <%=h @content.name %>
+</p>
+
+<p>
+  <b>Location:</b>
+  <%=h @content.location_id %>
+</p>
+
+<p>
+  <b>Tags:</b>
+  <%=h @content.tags %>
+</p>
+
+<p>
+  <b>Item:</b>
+  <%= link_to @content.item.url, @content.item.url %>
+</p>
+
+<%= link_to 'Edit', edit_content_path(@content) %> |
+<%= link_to 'Back', contents_path %>

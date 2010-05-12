@@ -25,6 +25,7 @@ a {
   padding: 20px 40px;
   border: solid 1px black;
   margin-top: 20px;
+  overflow: auto;
 }
 
 #flash_notice, #flash_error {
@@ -78,4 +79,8 @@ a {
 #errorExplanation ul li {
   font-size: 12px;
   list-style: disc;
+}
+
+#qrcode {
+  float: right;
 }

@@ -1,5 +1,11 @@
 <% title "Location" %>
 
+<div id="qrcode">
+<script type="text/javascript">
+  draw_qrcode("<%= @location.lbs_identifier %>");
+</script>
+</div>
+
 <p>
   <b>Name:</b>
   <%=h @location.name %>
@@ -22,9 +28,27 @@
 </p>
 <% end %>
 
-<script type="text/javascript">
-  draw_qrcode("<%= @location.lbs_identifier %>");
-</script>
+<% unless @location.contents.empty? %>
+<h2>Content</h2>
+  <table>
+    <tr>
+      <th>Type</th>
+      <th>Name</th>
+    </tr>
+  <% @location.contents.each do |c|  %>
+    <tr>
+    <td><%= c.item_content_type %></td>
+    <td><%= link_to c.item_file_name, c %></td>
+    </tr>
+  <% end %>
+  </table>
 
+  <h3>Total size:</h3>
+  <p><%= number_to_human_size(@size) %></p>
+<% end %>
+
+<h2>Actions</h2>
+
+<%= link_to 'New content', new_content_path(:location => @location.id) %> |
 <%= link_to 'Edit', edit_location_path(@location) %> |
 <%= link_to 'Back', @location.package %>

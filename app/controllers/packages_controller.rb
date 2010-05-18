@@ -4,10 +4,12 @@ class PackagesController < ApplicationController
   def index
     @packages = Package.all
 
+    @packages_json = Package.find(:all, :conditions => ["version > 0"])
+
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  # index.xml.builder 
-      format.json  { render :json => @packages }
+      format.json # index.json.erb
+      #format.xml  # index.xml.builder
     end
   end
 
@@ -18,7 +20,8 @@ class PackagesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @package }
+      format.json # show.json.erb
+      #format.xml  { render :xml => @package }
     end
   end
 
@@ -26,16 +29,6 @@ class PackagesController < ApplicationController
   # GET /packages/new.xml
   def new
     @package = Package.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @package }
-    end
-  end
-
-  # GET /packages/1/edit
-  def edit
-    @package = Package.find(params[:id])
   end
 
   # POST /packages
@@ -43,15 +36,11 @@ class PackagesController < ApplicationController
   def create
     @package = Package.new(params[:package])
 
-    respond_to do |format|
-      if @package.save
-        flash[:notice] = 'Package was successfully created.'
-        format.html { redirect_to(@package) }
-        format.xml  { render :xml => @package, :status => :created, :location => @package }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @package.errors, :status => :unprocessable_entity }
-      end
+    if @package.save
+      flash[:notice] = 'Package was successfully created.'
+      redirect_to(@package)
+    else
+      render :action => "new"
     end
   end
 
@@ -60,15 +49,16 @@ class PackagesController < ApplicationController
   def update
     @package = Package.find(params[:id])
 
-    respond_to do |format|
-      if @package.update_attributes(params[:package])
+    if @package.needs_update?
+      if @package.update_version
         flash[:notice] = 'Package was successfully updated.'
-        format.html { redirect_to(@package) }
-        format.xml  { head :ok }
+        redirect_to(@package)
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @package.errors, :status => :unprocessable_entity }
+        render :action => "show"
       end
+    else
+      flash[:error] = 'Package don\'t need no updating, fool!'
+      redirect_to(@package)
     end
   end
 
@@ -78,9 +68,6 @@ class PackagesController < ApplicationController
     @package = Package.find(params[:id])
     @package.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(packages_url) }
-      format.xml  { head :ok }
-    end
+    redirect_to(packages_url)
   end
 end

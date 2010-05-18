@@ -1,26 +1,51 @@
 <p>
   <b>Name:</b>
-  <%= @package.name %>
+  <%= h @package.name %>
 </p>
 
 <p>
   <b>LBS identifier:</b>
-  <%=h @package.lbs_identifier %>
+  <%= h @package.lbs_identifier %>
+</p>
+
+<p>
+  <b>Version:</b>
+  <%=h @package.version %>
 </p>
 
 <p>
   <b>Locations:</b>
 <ul>
   <% @package.locations.each do |l| %>
-  <li><%= link_to l.name, l %></li>
+  <li>
+    <%= link_to l.name, l %>
+    <% if (l.added > l.package_version) %>
+      (Added)
+    <% elsif l.deleted > l.package_version %>
+      (To be deleted)
+    <% elsif l.modified? %>
+      (Modified)
+    <% end %>
+
+    <%= link_to 'Destroy', l, :confirm => 'Are you sure?', :method => :delete %>
+  </li>
   <% end %>
 </ul>
 </p>
 
+<p>Current size (estimate): <%= number_to_human_size(@package.current_size) %></p>
+
+<% if @package.needs_update? %>
+<p>Future size (estimate): <%= number_to_human_size(@package.future_size) %></p>
+
 <p>
-  <b>Total size:</b>
+  <b>Update needed!</b>
 </p>
+<% end %>
 
 <%= link_to 'New location', new_location_path(:package => @package.id) %> |
-<%= link_to 'Edit', edit_package_path(@package) %> |
 <%= link_to 'Back', packages_path %>
+
+<% form_for(@package) do |f| %>
+<%= f.submit 'Update', :confirmation => "Some stuff is bound to be removed. Do you really wish to update?" %>
+<% end %>

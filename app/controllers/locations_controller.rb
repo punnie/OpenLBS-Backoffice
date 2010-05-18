@@ -3,23 +3,12 @@ class LocationsController < ApplicationController
   # GET /locations.xml
   def index
     @packages = Package.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @locations }
-    end
   end
 
   # GET /locations/1
   # GET /locations/1.xml
   def show
     @location = Location.find(params[:id])
-    @size = @location.contents.sum('item_file_size').bytes
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @location }
-    end
   end
 
   # GET /locations/new
@@ -34,11 +23,6 @@ class LocationsController < ApplicationController
     end
 
     @location.package = Package.find_by_id(params[:package])
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @location }
-    end
   end
 
   # GET /locations/1/edit
@@ -51,15 +35,11 @@ class LocationsController < ApplicationController
   def create
     @location = Location.new(params[:location])
 
-    respond_to do |format|
-      if @location.save
-        flash[:notice] = 'Location was successfully created.'
-        format.html { redirect_to(@location) }
-        format.xml  { render :xml => @location, :status => :created, :location => @location }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @location.errors, :status => :unprocessable_entity }
-      end
+    if @location.save
+      flash[:notice] = 'Location was successfully created.'
+      redirect_to(@location)
+    else
+      render :action => "new"
     end
   end
 
@@ -67,16 +47,12 @@ class LocationsController < ApplicationController
   # PUT /locations/1.xml
   def update
     @location = Location.find(params[:id])
-
-    respond_to do |format|
-      if @location.update_attributes(params[:location])
-        flash[:notice] = 'Location was successfully updated.'
-        format.html { redirect_to(@location) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @location.errors, :status => :unprocessable_entity }
-      end
+    
+    if @location.update_attributes(params[:location])
+      flash[:notice] = 'Location was successfully updated.'
+      redirect_to(@location)
+    else
+      render :action => "edit"
     end
   end
 
@@ -84,11 +60,13 @@ class LocationsController < ApplicationController
   # DELETE /locations/1.xml
   def destroy
     @location = Location.find(params[:id])
-    @location.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(locations_url) }
-      format.xml  { head :ok }
+    if @location.toggle_deleted
+      flash[:notice] = 'Location was successfully modified.'
+      redirect_to :back
+    else
+      flash[:error] = 'Some error just ocurred.'
+      reditect_to :back
     end
   end
 end

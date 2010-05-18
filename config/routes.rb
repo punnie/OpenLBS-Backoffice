@@ -5,6 +5,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :packages
 
+  map.resources :updates, :only => [:index, :show]
+  
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:

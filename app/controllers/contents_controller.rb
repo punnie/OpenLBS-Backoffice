@@ -3,22 +3,12 @@ class ContentsController < ApplicationController
   # GET /contents.xml
   def index
     @contents = Content.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @contents }
-    end
   end
 
   # GET /contents/1
   # GET /contents/1.xml
   def show
     @content = Content.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @content }
-    end
   end
 
   # GET /contents/new
@@ -33,11 +23,6 @@ class ContentsController < ApplicationController
     end
 
     @content.location = Location.find_by_id(params[:location])
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @content }
-    end
   end
 
   # GET /contents/1/edit
@@ -50,15 +35,11 @@ class ContentsController < ApplicationController
   def create
     @content = Content.new(params[:content])
 
-    respond_to do |format|
-      if @content.save
-        flash[:notice] = 'Content was successfully created.'
-        format.html { redirect_to(@content.location) }
-        format.xml  { render :xml => @content, :status => :created, :location => @content }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @content.errors, :status => :unprocessable_entity }
-      end
+    if @content.save
+      flash[:notice] = 'Content was successfully created.'
+      redirect_to(@content.location)
+    else
+      render :action => "new"
     end
   end
 
@@ -67,15 +48,11 @@ class ContentsController < ApplicationController
   def update
     @content = Content.find(params[:id])
 
-    respond_to do |format|
-      if @content.update_attributes(params[:content])
-        flash[:notice] = 'Content was successfully updated.'
-        format.html { redirect_to(@content) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @content.errors, :status => :unprocessable_entity }
-      end
+    if @content.update_attributes(params[:content])
+      flash[:notice] = 'Content was successfully updated.'
+      redirect_to(@content)
+    else
+      render :action => "edit"
     end
   end
 
@@ -83,11 +60,13 @@ class ContentsController < ApplicationController
   # DELETE /contents/1.xml
   def destroy
     @content = Content.find(params[:id])
-    @content.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(contents_url) }
-      format.xml  { head :ok }
+    if @content.toggle_deleted
+      flash[:notice] = 'Content was successfully modified.'
+      redirect_to :back
+    else
+      flash[:error] = 'Some error just ocurred.'
+      reditect_to :back
     end
   end
 end

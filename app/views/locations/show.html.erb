@@ -28,23 +28,64 @@
 </p>
 <% end %>
 
-<% unless @location.contents.empty? %>
+
+
+<% unless @location.contents.current(@location.package_version).empty? %>
 <h2>Content</h2>
+
+<h3>Current version's contents</h3>
+
   <table>
     <tr>
-      <th>Type</th>
       <th>Name</th>
+      <th>Type</th>
+      <th>To be deleted?</th>
+      <th></th>
     </tr>
-  <% @location.contents.each do |c|  %>
+  <% @location.contents.current(@location.package_version).each do |c|  %>
     <tr>
-    <td><%= c.item_content_type %></td>
     <td><%= link_to c.item_file_name, c %></td>
+    <td><%= c.item_content_type %></td>
+    
+    <% if c.deleted? %>
+    <td style="color:red;">Yes</td>
+    <% else %>
+    <td>No</td>
+    <% end %>
+
+    <% if c.deleted? %>
+    <td><%= link_to 'Undo destroying', c, :method => :delete %></td>
+    <% else %>
+    <td><%= link_to 'Destroy', c, :method => :delete %></td>
+    <% end %>
     </tr>
   <% end %>
   </table>
 
-  <h3>Total size:</h3>
-  <p><%= number_to_human_size(@size) %></p>
+  <% end %>
+
+  
+
+  <% unless @location.contents.future(@location.package_version).empty? %>
+
+  <h3>Contents added for next version</h3>
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th></th>
+    </tr>
+  <% @location.contents.future(@location.package_version).each do |c|  %>
+    <tr>
+    <td><%= link_to c.item_file_name, c %></td>
+    <td><%= c.item_content_type %></td>
+    <td><%= link_to 'Destroy', c, :confirm => 'This will permanently delete this content. Are you sure?', :method => :delete %></td>
+
+    </tr>
+  <% end %>
+  </table>
+
 <% end %>
 
 <h2>Actions</h2>

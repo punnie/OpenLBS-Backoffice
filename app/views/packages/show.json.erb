@@ -1,0 +1,27 @@
+{"package":
+{
+"name":<%= @package.name.to_json %>,
+"version":<%= @package.version.to_json %>,
+"updated_at":<%= @package.updated_at.to_json %>,
+"content_file_name":<%= @package.content_file_name.to_json %>,
+"content_file_size":<%= @package.content_file_size.to_json %>,
+"locations":[
+<% @package.locations.current(@package.version).each do |l| %>
+{
+"name":<%= l.name.to_json %>,
+"coordinates": <%= l.coordinates.to_json %>,
+"tags":<%= l.tags.to_json %>,
+"contents":[
+<% l.contents.current(@package.version).each do |c| %>
+{
+"name":<%= c.name.to_json %>,
+"tags":<%= c.tags.to_json %>,
+"path":<%= c.item_file_name.to_json %>
+}<% unless c == l.contents.current(@package.version).last %>,<% end %>
+<% end %>
+]
+}<% unless l == @package.locations.current(@package.version).last %>,<% end %>
+<% end %>
+]
+}
+}

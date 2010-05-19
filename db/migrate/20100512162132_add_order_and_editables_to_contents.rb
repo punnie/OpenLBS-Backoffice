@@ -1,4 +1,4 @@
-class AddOrderAndEditablesToContent < ActiveRecord::Migration
+class AddOrderAndEditablesToContents < ActiveRecord::Migration
   def self.up
     change_table :contents do |c|
       c.integer :added

@@ -1,4 +1,4 @@
-class AddVersionToPackage < ActiveRecord::Migration
+class AddVersionToPackages < ActiveRecord::Migration
   def self.up
     change_table :packages do |t|
       t.integer :version, :default => 0

@@ -8,7 +8,8 @@ class Content < ActiveRecord::Base
   validates_attachment_presence :item
   validates_uniqueness_of :item_file_name
 
-  before_create :set_editable_fields, :randomize_file_name
+  before_create :set_editable_fields
+  before_validation_on_create :randomize_file_name
 
   named_scope :current, lambda { |version| { :conditions => ['contents.added <= ?', version] }}
   named_scope :future, lambda { |version| { :conditions => ['contents.added > ?', version] }}

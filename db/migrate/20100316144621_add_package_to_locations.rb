@@ -1,4 +1,4 @@
-class AddPackageToLocation < ActiveRecord::Migration
+class AddPackageToLocations < ActiveRecord::Migration
   def self.up
     change_table :locations do |t|
       t.belongs_to :package

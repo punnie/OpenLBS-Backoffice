@@ -4,18 +4,13 @@
 </p>
 
 <p>
-  <b>Location:</b>
-  <%=h @content.location_id %>
-</p>
-
-<p>
   <b>Tags:</b>
   <%=h @content.tags %>
 </p>
 
 <p>
   <b>Item:</b>
-  <%= link_to @content.item.url, @content.item.url %>
+  <%=h @content.item_file_name %>
 </p>
 
 <%= link_to 'Edit', edit_content_path(@content) %> |

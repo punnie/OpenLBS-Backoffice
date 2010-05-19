@@ -8,7 +8,7 @@ class Content < ActiveRecord::Base
   validates_attachment_presence :item
   validates_uniqueness_of :item_file_name
 
-  before_create :set_editable_fields
+  before_create :set_editable_fields, :randomize_file_name
 
   named_scope :current, lambda { |version| { :conditions => ['contents.added <= ?', version] }}
   named_scope :future, lambda { |version| { :conditions => ['contents.added > ?', version] }}
@@ -35,6 +35,15 @@ class Content < ActiveRecord::Base
   def set_editable_fields
     self.added = self.location.package.version.next
     self.deleted = 0
+  end
+
+  def randomize_file_name
+    if(self.name.empty?)
+      self.name = item_file_name
+    end
+
+    extension = File.extname(item_file_name).downcase
+    self.item.instance_write(:file_name, "#{ActiveSupport::SecureRandom.hex(8)}#{extension}")
   end
 
 end

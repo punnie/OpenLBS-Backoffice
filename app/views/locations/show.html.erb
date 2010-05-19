@@ -44,7 +44,7 @@
     </tr>
   <% @location.contents.current(@location.package_version).each do |c|  %>
     <tr>
-    <td><%= link_to c.item_file_name, c %></td>
+    <td><%= link_to c.name, c %></td>
     <td><%= c.item_content_type %></td>
     
     <% if c.deleted? %>
@@ -78,7 +78,7 @@
     </tr>
   <% @location.contents.future(@location.package_version).each do |c|  %>
     <tr>
-    <td><%= link_to c.item_file_name, c %></td>
+    <td><%= link_to c.name, c %></td>
     <td><%= c.item_content_type %></td>
     <td><%= link_to 'Destroy', c, :confirm => 'This will permanently delete this content. Are you sure?', :method => :delete %></td>
 
